@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
 
 @Injectable()
-export class UtilsService {
+export class UtilService {
   private readonly SECRET = 'pa$$w0Rd';
 
   hashString(data: string) {

@@ -1,34 +1,34 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SectionsService } from './sections.service';
+import { SectionService } from './section.service';
 import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
 
-@Controller('sections')
-export class SectionsController {
-  constructor(private readonly sectionsService: SectionsService) {}
+@Controller('section')
+export class SectionController {
+  constructor(private readonly sectionService: SectionService) {}
 
   @Post()
   create(@Body() createSectionDto: CreateSectionDto) {
-    return this.sectionsService.create(createSectionDto);
+    return this.sectionService.create(createSectionDto);
   }
 
   @Get()
   findAll() {
-    return this.sectionsService.findAll();
+    return this.sectionService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.sectionsService.findOne(+id);
+    return this.sectionService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSectionDto: UpdateSectionDto) {
-    return this.sectionsService.update(+id, updateSectionDto);
+    return this.sectionService.update(+id, updateSectionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.sectionsService.remove(+id);
+    return this.sectionService.remove(+id);
   }
 }

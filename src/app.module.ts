@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UtilsModule } from './modules/utils/utils.module';
+import { UtilModule } from './modules/util/util.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/users/users.module';
-import { SectionsModule } from './modules/sections/sections.module';
+import { UserModule } from './modules/user/user.module';
+import { SectionModule } from './modules/section/section.module';
+import { RegionModule } from './modules/region/region.module';
+import { RoleModule } from './modules/role/role.module';
+import { OrganizationModule } from './modules/organization/organization.module';
 
 @Module({
   imports: [
@@ -25,10 +28,13 @@ import { SectionsModule } from './modules/sections/sections.module';
         logging: true,
       }),
     }),
-    UtilsModule,
+    UtilModule,
     AuthModule,
-    UsersModule,
-    SectionsModule,
+    UserModule,
+    SectionModule,
+    RegionModule,
+    RoleModule,
+    OrganizationModule,
   ],
   controllers: [],
   providers: [],

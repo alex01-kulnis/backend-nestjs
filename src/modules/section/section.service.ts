@@ -3,13 +3,13 @@ import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
 
 @Injectable()
-export class SectionsService {
+export class SectionService {
   create(createSectionDto: CreateSectionDto) {
     return 'This action adds a new section';
   }
 
   findAll() {
-    return `This action returns all sections`;
+    return `This action returns all section`;
   }
 
   findOne(id: number) {
