@@ -1,3 +1,5 @@
+import { Declaration } from './modules/declaration/entities/declaration.entity';
+import { Category } from './modules/category/entities/category.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,6 +11,7 @@ import { SectionModule } from './modules/section/section.module';
 import { RegionModule } from './modules/region/region.module';
 import { RoleModule } from './modules/role/role.module';
 import { OrganizationModule } from './modules/organization/organization.module';
+import { DeclarationModule } from './modules/declaration/declaration.module';
 
 @Module({
   imports: [
@@ -22,10 +25,10 @@ import { OrganizationModule } from './modules/organization/organization.module';
         password: config.get<string>('TYPEORM_PASSWORD'),
         database: config.get<string>('TYPEORM_DATABASE'),
         port: config.get<number>('TYPEORM_PORT'),
-        entities: [__dirname + 'dist/**/*.entity{.ts,.js'],
-        synchronize: true,
+        // entities: [Category, Declaration],
+        synchronize: false,
         autoLoadEntities: true,
-        logging: true,
+        logging: false,
       }),
     }),
     UtilModule,
@@ -35,6 +38,7 @@ import { OrganizationModule } from './modules/organization/organization.module';
     RegionModule,
     RoleModule,
     OrganizationModule,
+    DeclarationModule,
   ],
   controllers: [],
   providers: [],
