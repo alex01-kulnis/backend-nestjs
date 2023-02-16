@@ -1,5 +1,3 @@
-import { Declaration } from './modules/declaration/entities/declaration.entity';
-import { Category } from './modules/category/entities/category.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -25,12 +23,13 @@ import { DeclarationModule } from './modules/declaration/declaration.module';
         password: config.get<string>('TYPEORM_PASSWORD'),
         database: config.get<string>('TYPEORM_DATABASE'),
         port: config.get<number>('TYPEORM_PORT'),
-        // entities: [Category, Declaration],
-        synchronize: false,
+        entities: [__dirname + 'dist/**/*.entity{.ts,.js}'],
+        synchronize: true,
         autoLoadEntities: true,
         logging: false,
       }),
     }),
+    //
     UtilModule,
     AuthModule,
     UserModule,

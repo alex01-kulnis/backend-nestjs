@@ -1,4 +1,3 @@
-import { Declaration } from './../../declaration/entities/declaration.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,15 +6,15 @@ import {
   JoinTable,
 } from 'typeorm';
 
-@Entity()
-export class Category {
+@Entity('category')
+export class CategoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   category: string;
 
-  @ManyToMany(() => Declaration, (declaration) => declaration.categories)
-  @JoinTable()
-  declarations: Declaration[];
+  // @ManyToMany(() => Declaration, (declaration) => declaration.categories)
+  // @JoinTable()
+  // declarations: Declaration[];
 }
