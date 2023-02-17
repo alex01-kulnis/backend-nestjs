@@ -1,26 +1,83 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { UtilService } from './../util/util.service';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
+import { AuthUserDto } from './dto/auth.user.dto';
+// import { UtilsService } from '../util/util.service';
+// import { AuthUserDto } from './dto/auth-user.dto';
+// import { CreateUserDto } from './dto/create-user.dto';
+// import { DatabaseService } from '../database/Database.service';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private utilService: UtilService,
+    private userService: UserService,
+  ) {}
+
+  async login(authUserDto: AuthUserDto) {
+    // const user = await this.validateUser(authUserDto);
+    // return this.generateToken(user);
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  private async validateUser(authUserDto: AuthUserDto) {
+    const user = await this.userService.findUser(authUserDto.login);
+
+    if (!user)
+      throw new UnauthorizedException({
+        message: `Такого пользователя не существует`,
+      });
+
+    // const passwordEquals =
+    //   this.utilService.hashString(authUserDto.password) !== user.login;
+
+    // if (passwordEquals) {
+    //   throw new UnauthorizedException({
+    //     message: `Пароль введен неверно`,
+    //   });
+    // }
+    return user;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+  // async registration(createUserDto: CreateUserDto) {
+  //   let candidate = await this.userService.findUser(createUserDto.login);
+  //   if (candidate)
+  //     throw new HttpException(
+  //       `Пользователь с логином ${createUserDto.login} уже существует`,
+  //       HttpStatus.BAD_REQUEST,
+  //     );
+  //   const hashPassword = this.utilsService.hashString(createUserDto.password);
+  //   await this.dbContext
+  //     .query('CALL insert_user($1, $2, $3, $4)', [
+  //       createUserDto.firstname,
+  //       createUserDto.secondname,
+  //       createUserDto.login,
+  //       hashPassword,
+  //     ])
+  //     .then(async () => {
+  //       candidate = await this.userService.findUser(createUserDto.login);
+  //     })
+  //     .catch((err) => {
+  //       throw new InternalServerErrorException(err);
+  //     });
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+  //   return this.generateToken(candidate);
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
+  // async generateToken(user: UserModel) {
+  //   const payload = {
+  //     id_user: user.id_user,
+  //     firstname: user.firstname,
+  //     secondname: user.secondname,
+  //   };
+  //   return {
+  //     token: this.jwtService.sign(payload),
+  //   };
+  // }
 }

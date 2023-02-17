@@ -16,6 +16,11 @@ export class UserService {
     return 'This action adds a new user';
   }
 
+  async findUser(login: string) {
+    const user = await this.userRepository.findOne({ where: { login: login } });
+    return user;
+  }
+
   findAll() {
     return `This action returns all user`;
   }
