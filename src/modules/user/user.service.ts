@@ -2,8 +2,8 @@ import { UserEntity } from './entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+
+import { CreateUserDto } from '../auth/dto/user-dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -11,14 +11,20 @@ export class UserService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
   ) {}
-  async create(createUserDto: CreateUserDto) {
-    const user = await this.userRepository.create(createUserDto);
-    return 'This action adds a new user';
+  async createUser(createUserDto: CreateUserDto) {
+    const user = this.userRepository.create(createUserDto);
+    this.userRepository.save(user);
+    return user;
   }
 
-  async findUser(login: string) {
-    const user = await this.userRepository.findOne({ where: { login: login } });
-    return user;
+  async findUsersByField(field: string, searchTerm: string) {
+    const query = this.userRepository.createQueryBuilder('user');
+    if (searchTerm) {
+      query.where(`user.${field} LIKE :searchTerm`, {
+        searchTerm: `%${searchTerm}%`,
+      });
+    }
+    return await query.getRawMany();
   }
 
   findAll() {
@@ -29,7 +35,7 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: number, updateUserDto: any) {
     return `This action updates a #${id} user`;
   }
 
