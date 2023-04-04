@@ -1,15 +1,15 @@
-import { UserEntity } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateUserDto } from '../auth/dto/user-dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
   async createUser(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
@@ -17,14 +17,14 @@ export class UserService {
     return user;
   }
 
-  async findUsersByField(field: string, searchTerm: string) {
+  async findUserByField(field: string, searchTerm: string) {
     const query = this.userRepository.createQueryBuilder('user');
     if (searchTerm) {
       query.where(`user.${field} LIKE :searchTerm`, {
         searchTerm: `%${searchTerm}%`,
       });
     }
-    return await query.getRawMany();
+    return await query.getRawOne();
   }
 
   findAll() {

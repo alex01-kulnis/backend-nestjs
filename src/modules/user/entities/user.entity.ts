@@ -1,8 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { Role } from 'src/modules/role/entities/role.entity';
 
 @Entity('users')
-export class UserEntity {
-  @PrimaryGeneratedColumn('uuid')
+export class User {
+  @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
   @Column({
@@ -38,4 +48,10 @@ export class UserEntity {
 
   @Column()
   password: string;
+
+  @ManyToOne(() => Role, (role) => role.users)
+  role: Role;
+
+  // @Column()
+  // role: string;
 }

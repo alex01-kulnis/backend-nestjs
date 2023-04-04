@@ -8,8 +8,9 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { AuthUserDto } from './dto/user-dto/auth.user.dto';
-import { CreateUserDto } from './dto/user-dto/create-user.dto';
+import { AuthUserDto } from './dto/auth.user.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { UserFieldsName } from './enums/user-fields.name';
 // import { UtilsService } from '../util/util.service';
 // import { AuthUserDto } from './dto/auth-user.dto';
 // import { CreateUserDto } from './dto/create-user.dto';
@@ -22,32 +23,65 @@ export class AuthService {
     private userService: UserService,
   ) {}
 
-  // async login(authUserDto: AuthUserDto) {
-  //   // const user = await this.validateUser(authUserDto);
-  //   // return this.generateToken(user);
-  // }
+  async loginByUser(authUserDto: AuthUserDto) {
+    const user = await this.validateUser(authUserDto);
+    // return this.generateToken(user);
+  }
 
-  // private async validateUser(authUserDto: AuthUserDto) {
-  //   const user = await this.userService.findUser(authUserDto.login);
+  private async validateUser(authUserDto: AuthUserDto) {
+    const user: any = await this.userService.findUserByField(
+      UserFieldsName.LOGIN,
+      authUserDto.login,
+    );
 
-  //   if (!user)
-  //     throw new UnauthorizedException({
-  //       message: `Такого пользователя не существует`,
-  //     });
+    if (!user)
+      throw new UnauthorizedException({
+        message: `Такого пользователя не существует`,
+      });
 
-  //   // const passwordEquals =
-  //   //   this.utilService.hashString(authUserDto.password) !== user.login;
+    const passwordEquals =
+      this.utilService.hashString(authUserDto.password) !== user.login;
 
-  //   // if (passwordEquals) {
-  //   //   throw new UnauthorizedException({
-  //   //     message: `Пароль введен неверно`,
-  //   //   });
-  //   // }
-  //   return user;
-  // }
+    if (passwordEquals) {
+      throw new UnauthorizedException({
+        message: `Пароль введен неверно`,
+      });
+    }
+    return user;
+  }
 
-  async registration(createUserDto: CreateUserDto) {
-    const login = await this.userService.findUsersByField(
+  async registrationByUser(createUserDto: CreateUserDto) {
+    const login = await this.userService.findUserByField(
+      UserFieldsName.LOGIN,
+      createUserDto.login,
+    );
+
+    if (login) {
+      throw new HttpException(
+        `Пользователь с логином ${createUserDto.login} уже существует`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const email = await this.userService.findUserByField(
+      UserFieldsName.EMAIL,
+      createUserDto.email,
+    );
+
+    if (email)
+      throw new HttpException(
+        `Пользователь с почтой ${createUserDto.email} уже существует`,
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const hashPassword = this.utilService.hashString(createUserDto.password);
+    createUserDto.password = hashPassword;
+    const user = this.userService.createUser(createUserDto);
+    return user;
+  }
+
+  async registrationByOrg(createUserDto: CreateUserDto) {
+    const login = await this.userService.findUserByField(
       'login',
       createUserDto.login,
     );
@@ -59,7 +93,7 @@ export class AuthService {
       );
     }
 
-    const email = await this.userService.findUsersByField(
+    const email = await this.userService.findUserByField(
       'email',
       createUserDto.email,
     );
