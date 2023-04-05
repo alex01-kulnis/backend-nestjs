@@ -6,7 +6,11 @@ import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { UtilModule } from '../util/util.module';
+
+import { RoleService } from '../role/role.service';
+import { UtilService } from '../util/util.service';
 import { Role } from '../role/entities/role.entity';
+import { RoleModule } from '../role/role.module';
 
 @Module({
   imports: [
@@ -17,9 +21,10 @@ import { Role } from '../role/entities/role.entity';
     }),
     UtilModule,
     UserModule,
+    RoleModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
-  // exports: [JwtModule],
+  exports: [AuthService],
 })
 export class AuthModule {}

@@ -1,4 +1,4 @@
-export enum UserFieldsName {
+export enum UserFieldsNameEnum {
   LOGIN = 'login',
   EMAIL = 'email',
 }

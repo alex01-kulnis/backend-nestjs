@@ -1,12 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Role } from 'src/modules/role/entities/role.entity';
 
@@ -33,7 +25,7 @@ export class User {
   @Column({
     nullable: true,
   })
-  patronymic: string;
+  last_name: string;
 
   @Column({
     nullable: true,

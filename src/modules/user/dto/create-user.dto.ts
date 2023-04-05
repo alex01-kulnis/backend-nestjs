@@ -1,5 +1,7 @@
 import { IsOptional } from 'class-validator';
 
+import { Role } from 'src/modules/role/entities/role.entity';
+
 export class CreateUserDto {
   @IsOptional()
   organization_name: string;
@@ -19,5 +21,5 @@ export class CreateUserDto {
   email: string;
   login: string;
   password: string;
-  roleId: number;
+  role: Role;
 }

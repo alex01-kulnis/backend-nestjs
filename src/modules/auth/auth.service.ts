@@ -1,4 +1,3 @@
-import { UtilService } from './../util/util.service';
 import {
   HttpException,
   HttpStatus,
@@ -7,20 +6,22 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
+import { UtilService } from './../util/util.service';
 import { UserService } from '../user/user.service';
+import { RoleService } from '../role/role.service';
 import { AuthUserDto } from './dto/auth.user.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { UserFieldsName } from './enums/user-fields.name';
-// import { UtilsService } from '../util/util.service';
-// import { AuthUserDto } from './dto/auth-user.dto';
-// import { CreateUserDto } from './dto/create-user.dto';
-// import { DatabaseService } from '../database/Database.service';
+import { UserFieldsNameEnum } from './enums/user-fields-name.enum';
+import { UserRoleEnum } from './enums/user-role.enum';
+import { Role } from '../role/entities/role.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private utilService: UtilService,
     private userService: UserService,
+    private roleService: RoleService,
   ) {}
 
   async loginByUser(authUserDto: AuthUserDto) {
@@ -29,8 +30,8 @@ export class AuthService {
   }
 
   private async validateUser(authUserDto: AuthUserDto) {
-    const user: any = await this.userService.findUserByField(
-      UserFieldsName.LOGIN,
+    const user: AuthUserDto = await this.userService.findUserByField(
+      UserFieldsNameEnum.LOGIN,
       authUserDto.login,
     );
 
@@ -51,8 +52,10 @@ export class AuthService {
   }
 
   async registrationByUser(createUserDto: CreateUserDto) {
+    console.log('dasdasdasdasdsa');
+
     const login = await this.userService.findUserByField(
-      UserFieldsName.LOGIN,
+      UserFieldsNameEnum.LOGIN,
       createUserDto.login,
     );
 
@@ -64,7 +67,7 @@ export class AuthService {
     }
 
     const email = await this.userService.findUserByField(
-      UserFieldsName.EMAIL,
+      UserFieldsNameEnum.EMAIL,
       createUserDto.email,
     );
 
@@ -76,17 +79,19 @@ export class AuthService {
 
     const hashPassword = this.utilService.hashString(createUserDto.password);
     createUserDto.password = hashPassword;
+    createUserDto.role = await this.roleService.setRole(UserRoleEnum.USER);
+
     const user = this.userService.createUser(createUserDto);
     return user;
   }
 
   async registrationByOrg(createUserDto: CreateUserDto) {
     const login = await this.userService.findUserByField(
-      'login',
+      UserFieldsNameEnum.LOGIN,
       createUserDto.login,
     );
 
-    if (login.length !== 0) {
+    if (login) {
       throw new HttpException(
         `Пользователь с логином ${createUserDto.login} уже существует`,
         HttpStatus.BAD_REQUEST,
@@ -94,11 +99,11 @@ export class AuthService {
     }
 
     const email = await this.userService.findUserByField(
-      'email',
+      UserFieldsNameEnum.EMAIL,
       createUserDto.email,
     );
 
-    if (email.length !== 0)
+    if (email)
       throw new HttpException(
         `Пользователь с почтой ${createUserDto.email} уже существует`,
         HttpStatus.BAD_REQUEST,
@@ -106,6 +111,10 @@ export class AuthService {
 
     const hashPassword = this.utilService.hashString(createUserDto.password);
     createUserDto.password = hashPassword;
+    createUserDto.role = await this.roleService.setRole(
+      UserRoleEnum.ORGANIZATION,
+    );
+
     const user = this.userService.createUser(createUserDto);
     return user;
   }
