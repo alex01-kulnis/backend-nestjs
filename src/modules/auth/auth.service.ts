@@ -14,7 +14,7 @@ import { AuthUserDto } from './dto/auth.user.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserFieldsNameEnum } from './enums/user-fields-name.enum';
 import { UserRoleEnum } from './enums/user-role.enum';
-import { Role } from '../role/entities/role.entity';
+import statusCodes from './error/statusCodes';
 
 @Injectable()
 export class AuthService {
@@ -61,7 +61,7 @@ export class AuthService {
 
     if (login) {
       throw new HttpException(
-        `Пользователь с логином ${createUserDto.login} уже существует`,
+        statusCodes.USER_ALREADY_EXIST,
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -73,7 +73,7 @@ export class AuthService {
 
     if (email)
       throw new HttpException(
-        `Пользователь с почтой ${createUserDto.email} уже существует`,
+        statusCodes.USER_ALREADY_EXIST,
         HttpStatus.BAD_REQUEST,
       );
 
