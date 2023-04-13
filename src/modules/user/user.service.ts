@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { Role } from '../role/entities/role.entity';
+import { StatusUser } from './enum/status-users.enum';
 
 @Injectable()
 export class UserService {
@@ -18,6 +18,14 @@ export class UserService {
     return user;
   }
 
+  async findInactiveUsers() {
+    return await this.userRepository.find({
+      where: {
+        status: StatusUser.INACTIVE,
+      },
+    });
+  }
+
   async findUserByField(field: string, searchTerm: string) {
     const query = this.userRepository.createQueryBuilder('user');
     if (searchTerm) {
@@ -28,19 +36,25 @@ export class UserService {
     return await query.getRawOne();
   }
 
-  findAll() {
-    return this.userRepository.find();
+  async findAll() {
+    return await this.userRepository.find();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: any) {
-    return `This action updates a #${id} user`;
+  async patch(id: number, updateUserDto: any) {
+    return await this.userRepository.update(id, updateUserDto);
   }
 
-  delete(id: number) {
-    return this.userRepository.delete(id);
+  async update(id: number, updateUserDto: any) {
+    const user = await this.userRepository.findOneOrFail({ where: { id: id } });
+    this.userRepository.merge(user, updateUserDto);
+    return this.userRepository.save(user);
+  }
+
+  async delete(id: number) {
+    return await this.userRepository.delete(id);
   }
 }

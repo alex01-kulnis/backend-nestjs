@@ -14,6 +14,7 @@ import { AuthUserDto } from './dto/auth.user.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserFieldsNameEnum } from './enums/user-fields-name.enum';
 import { UserRoleEnum } from './enums/user-role.enum';
+import { StatusUser } from '../user/enum/status-users.enum';
 import statusCodes from './error/statusCodes';
 
 @Injectable()
@@ -114,6 +115,7 @@ export class AuthService {
     createUserDto.role = await this.roleService.setRole(
       UserRoleEnum.ORGANIZATION,
     );
+    createUserDto.status = StatusUser.INACTIVE;
 
     const user = this.userService.createUser(createUserDto);
     return user;

@@ -1,6 +1,7 @@
 import { IsOptional } from 'class-validator';
 
 import { Role } from 'src/modules/role/entities/role.entity';
+import { StatusUser } from '../enum/status-users.enum';
 
 export class CreateUserDto {
   @IsOptional()
@@ -17,6 +18,9 @@ export class CreateUserDto {
 
   @IsOptional()
   phone: string;
+
+  @IsOptional()
+  status: StatusUser;
 
   email: string;
   login: string;
