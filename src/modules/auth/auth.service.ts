@@ -53,7 +53,13 @@ export class AuthService {
   }
 
   async registrationByUser(createUserDto: CreateUserDto) {
-    console.log('dasdasdasdasdsa');
+    if (
+      !createUserDto.login ||
+      !createUserDto.email ||
+      !createUserDto.password
+    ) {
+      throw new HttpException(statusCodes.EMPTY_FIELD, HttpStatus.BAD_REQUEST);
+    }
 
     const login = await this.userService.findUserByField(
       UserFieldsNameEnum.LOGIN,
@@ -87,6 +93,19 @@ export class AuthService {
   }
 
   async registrationByOrg(createUserDto: CreateUserDto) {
+    if (
+      !createUserDto.login ||
+      !createUserDto.first_name ||
+      !createUserDto.middle_name ||
+      !createUserDto.organization_name ||
+      !createUserDto.patronymic ||
+      !createUserDto.phone ||
+      !createUserDto.email ||
+      !createUserDto.password
+    ) {
+      throw new HttpException(statusCodes.EMPTY_FIELD, HttpStatus.BAD_REQUEST);
+    }
+
     const login = await this.userService.findUserByField(
       UserFieldsNameEnum.LOGIN,
       createUserDto.login,
