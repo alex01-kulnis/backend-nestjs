@@ -14,7 +14,7 @@ export class CreateUserDto {
   middle_name: string;
 
   @IsOptional()
-  patronymic: string;
+  last_name: string;
 
   @IsOptional()
   phone: string;

@@ -98,7 +98,7 @@ export class AuthService {
       !createUserDto.first_name ||
       !createUserDto.middle_name ||
       !createUserDto.organization_name ||
-      !createUserDto.patronymic ||
+      !createUserDto.last_name ||
       !createUserDto.phone ||
       !createUserDto.email ||
       !createUserDto.password
