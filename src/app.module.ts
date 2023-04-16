@@ -6,9 +6,7 @@ import { UtilModule } from './modules/util/util.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { SectionModule } from './modules/section/section.module';
-import { RegionModule } from './modules/region/region.module';
 import { RoleModule } from './modules/role/role.module';
-import { OrganizationModule } from './modules/organization/organization.module';
 import { DeclarationModule } from './modules/declaration/declaration.module';
 
 @Module({
@@ -34,9 +32,7 @@ import { DeclarationModule } from './modules/declaration/declaration.module';
     AuthModule,
     UserModule,
     SectionModule,
-    RegionModule,
     RoleModule,
-    OrganizationModule,
     DeclarationModule,
   ],
   controllers: [],

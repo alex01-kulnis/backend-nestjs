@@ -23,15 +23,16 @@ export class AuthService {
     private utilService: UtilService,
     private userService: UserService,
     private roleService: RoleService,
+    private jwtService: JwtService,
   ) {}
 
-  async loginByUser(authUserDto: AuthUserDto) {
+  async login(authUserDto: AuthUserDto) {
     const user = await this.validateUser(authUserDto);
-    // return this.generateToken(user);
+    return this.generateToken(user);
   }
 
   private async validateUser(authUserDto: AuthUserDto) {
-    const user: AuthUserDto = await this.userService.findUserByField(
+    const user = await this.userService.findUserByField(
       UserFieldsNameEnum.LOGIN,
       authUserDto.login,
     );
@@ -42,13 +43,14 @@ export class AuthService {
       });
 
     const passwordEquals =
-      this.utilService.hashString(authUserDto.password) !== user.login;
+      this.utilService.hashString(authUserDto.password) !== user.user_password;
 
     if (passwordEquals) {
       throw new UnauthorizedException({
         message: `Пароль введен неверно`,
       });
     }
+
     return user;
   }
 
@@ -140,14 +142,13 @@ export class AuthService {
     return user;
   }
 
-  // async generateToken(user: UserModel) {
-  //   const payload = {
-  //     id_user: user.id_user,
-  //     firstname: user.firstname,
-  //     secondname: user.secondname,
-  //   };
-  //   return {
-  //     token: this.jwtService.sign(payload),
-  //   };
-  // }
+  async generateToken(user: any) {
+    const payload = {
+      id_user: user.user_id,
+    };
+    return {
+      token: this.jwtService.sign(payload),
+      role: user.user_roleId,
+    };
+  }
 }

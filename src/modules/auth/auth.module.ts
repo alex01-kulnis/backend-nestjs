@@ -1,10 +1,10 @@
-import { UserModule } from './../user/user.module';
-import { UserService } from './../user/user.service';
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from './../user/user.module';
 import { UtilModule } from '../util/util.module';
 
 import { RoleService } from '../role/role.service';
@@ -25,6 +25,6 @@ import { RoleModule } from '../role/role.module';
   ],
   controllers: [AuthController],
   providers: [AuthService],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
