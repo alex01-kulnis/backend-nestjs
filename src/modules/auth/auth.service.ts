@@ -37,7 +37,7 @@ export class AuthService {
       authUserDto.login,
     );
 
-    if (!user)
+    if (!user || user.user_status === StatusUser.INACTIVE)
       throw new UnauthorizedException({
         message: `Такого пользователя не существует`,
       });

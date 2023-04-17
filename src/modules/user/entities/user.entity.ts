@@ -1,6 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { Role } from 'src/modules/role/entities/role.entity';
+import { Section } from 'src/modules/section/entities/section.entity';
 import { StatusUser } from '../enum/status-users.enum';
 
 @Entity('users')
@@ -48,6 +55,9 @@ export class User {
     default: StatusUser.ACTIVE,
   })
   status: StatusUser;
+
+  @OneToMany(() => Section, (section) => section.user)
+  section: Section[];
 
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;

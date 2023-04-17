@@ -39,6 +39,13 @@ export class UserController {
     return this.userService.findUserById(tokenData.id_user);
   }
 
+  @Get('/section-by-org')
+  @UseGuards(JwtAuthGuard)
+  findSectionsByOrg(@Request() req: any) {
+    const tokenData = req.user;
+    return this.userService.findSectionsByOrg(+tokenData.id_user);
+  }
+
   @Patch()
   @UseGuards(JwtAuthGuard)
   patchByAuthUser(@Request() req: any, @Body() updateUserDto: any) {

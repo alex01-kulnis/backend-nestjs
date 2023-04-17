@@ -40,6 +40,14 @@ export class UserService {
     return await query.getRawOne();
   }
 
+  async findSectionsByOrg(id: number) {
+    const result = await this.userRepository.findOne({
+      where: { id: id },
+      relations: ['section'],
+    });
+    return result;
+  }
+
   async findAll() {
     return await this.userRepository.find();
   }
@@ -53,14 +61,21 @@ export class UserService {
   }
 
   async patch(id: number, updateUserDto: UpdateUserDto) {
-    if (
-      updateUserDto.hasOwnProperty('password') &&
-      updateUserDto.password !== null &&
-      updateUserDto.password !== undefined
-    ) {
-      const hashPassword = this.utilService.hashString(updateUserDto.password);
-      updateUserDto['password'] = hashPassword;
+    if (updateUserDto.hasOwnProperty('password')) {
+      if (
+        updateUserDto.password !== null &&
+        updateUserDto.password !== undefined &&
+        updateUserDto.password !== ''
+      ) {
+        const hashPassword = this.utilService.hashString(
+          updateUserDto.password,
+        );
+        updateUserDto.password = hashPassword;
+      } else {
+        delete updateUserDto.password;
+      }
     }
+
     return await this.userRepository.update(id, updateUserDto);
   }
 

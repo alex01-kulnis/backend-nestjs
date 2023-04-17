@@ -1,15 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+} from '@nestjs/common';
 import { SectionService } from './section.service';
 import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
 
-@Controller('section')
+@Controller('api/section')
 export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 
   @Post()
-  create(@Body() createSectionDto: CreateSectionDto) {
-    return this.sectionService.create(createSectionDto);
+  create(@Request() req: any, @Body() createSectionDto: CreateSectionDto) {
+    const tokenData = req.user;
+    return this.sectionService.create(26, createSectionDto);
   }
 
   @Get()
