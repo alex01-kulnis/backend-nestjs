@@ -1,4 +1,3 @@
-import { User } from './entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,6 +5,7 @@ import { Repository } from 'typeorm';
 import { UtilService } from '../util/util.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { StatusUser } from './enum/status-users.enum';
+import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
@@ -49,7 +49,9 @@ export class UserService {
   }
 
   async findAll() {
-    return await this.userRepository.find();
+    return await this.userRepository.find({
+      relations: ['role'],
+    });
   }
 
   async findUserById(id: number) {

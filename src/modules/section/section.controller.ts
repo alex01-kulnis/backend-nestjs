@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Request,
+  Put,
 } from '@nestjs/common';
 import { SectionService } from './section.service';
 import { CreateSectionDto } from './dto/create-section.dto';
@@ -27,14 +28,19 @@ export class SectionController {
     return this.sectionService.findAll();
   }
 
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: any) {
+    return this.sectionService.update(+id, updateUserDto);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.sectionService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSectionDto: UpdateSectionDto) {
-    return this.sectionService.update(+id, updateSectionDto);
+  patch(@Param('id') id: string, @Body() updateSectionDto: UpdateSectionDto) {
+    return this.sectionService.patch(+id, updateSectionDto);
   }
 
   @Delete(':id')
