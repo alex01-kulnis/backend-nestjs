@@ -65,6 +65,9 @@ export class Section {
   @Column()
   description: string;
 
-  @ManyToOne((type) => User, (user) => user.section)
+  @ManyToOne((type) => User, (user) => user.section, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   user: User;
 }

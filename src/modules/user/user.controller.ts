@@ -62,4 +62,11 @@ export class UserController {
   delete(@Param('id') id: string) {
     return this.userService.delete(+id);
   }
+
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  cascadeDeleteUser(@Request() req: any) {
+    const tokenData = req.user;
+    return this.userService.delete(+tokenData.id_user);
+  }
 }

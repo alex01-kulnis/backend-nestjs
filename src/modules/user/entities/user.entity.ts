@@ -56,7 +56,7 @@ export class User {
   })
   status: StatusUser;
 
-  @OneToMany(() => Section, (section) => section.user)
+  @OneToMany(() => Section, (section) => section.user, { cascade: ['remove'] })
   section: Section[];
 
   @ManyToOne(() => Role, (role) => role.users)
