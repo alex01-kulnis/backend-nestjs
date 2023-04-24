@@ -45,8 +45,7 @@ export class SectionService {
     return `This action updates a #${id} section`;
   }
 
-  remove(id: number) {
-    this.sectionRepository.delete(id);
-    return `This action removes a #${id} section`;
+  async remove(id: number) {
+    return await this.sectionRepository.delete(id);
   }
 }
