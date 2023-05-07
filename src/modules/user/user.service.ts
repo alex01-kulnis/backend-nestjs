@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { StatusUser } from './enum/status-users.enum';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private utilService: UtilService,
+    private mailService: MailerService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto) {
@@ -85,6 +87,23 @@ export class UserService {
     const user = await this.userRepository.findOneOrFail({ where: { id: id } });
     this.userRepository.merge(user, updateUserDto);
     return this.userRepository.save(user);
+  }
+
+  async refuse(id: number) {
+    console.log('id', id);
+
+    const user: any = await this.findUserById(id);
+
+    console.log(user[0].email);
+
+    // this.mailService.sendMail({
+    //   to: 'kulnis71@gmail.com',
+    //   from: 'kulnis7@mail.ru',
+    //   subject: 'testing',
+    //   text: 'welcome',
+    //   html: '<b>welcome<b/>',
+    // });
+    // return await this.userRepository.delete(id);
   }
 
   async delete(id: number) {

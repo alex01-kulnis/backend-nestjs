@@ -8,9 +8,21 @@ import { UserModule } from './modules/user/user.module';
 import { SectionModule } from './modules/section/section.module';
 import { RoleModule } from './modules/role/role.module';
 import { DeclarationModule } from './modules/declaration/declaration.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        secure: false,
+        port: 587,
+        auth: {
+          user: 'kulnis71@gmail.com',
+          pass: 'P?M9UbjQ(u9=,$C',
+        },
+      },
+    }),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: './.env' }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

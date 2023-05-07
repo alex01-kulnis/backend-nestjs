@@ -60,7 +60,7 @@ export class UserController {
 
   @Delete(':id')
   delete(@Param('id') id: string) {
-    return this.userService.delete(+id);
+    return this.userService.refuse(+id);
   }
 
   @Delete()
