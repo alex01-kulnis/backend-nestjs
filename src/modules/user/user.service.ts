@@ -90,11 +90,7 @@ export class UserService {
   }
 
   async refuse(id: number) {
-    console.log('id', id);
-
     const user: any = await this.findUserById(id);
-
-    console.log(user[0].email);
 
     // this.mailService.sendMail({
     //   to: 'kulnis71@gmail.com',
